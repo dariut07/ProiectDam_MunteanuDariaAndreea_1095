@@ -1,0 +1,7 @@
+Tema proiectului va fi o aplicatie de gestionare a cheltuielilor cu urmatoarele posibile ecrane:
+-ecran de adaugare cheltuiala unde se pot adauga cheltuielile cu detalii precum categoria cheltuielii si data
+-ecran de adaugare venit unde se poate adauga un venit pentru marirea bugetului si se pot preciza data si infos cu privire la acest venit (ex. cadou,salariu)
+-ecran de statistici unde sunt prezentate cheltuielile sub forma unor grafice pe diferite categorii si/sau perioade
+-ecran de setari ale user ului prin care acesta isi poate selecta valuta,daca doreste sa primeasca notificari,tema,etc
+-ecran de home unde apare valoarea cheltuielilor efectuate in saptamana curenta/luna alaturi de bugetul actual
+-ecran de tranzactii unde pot aparea toate cheltuielile efectuate sau toate veniturile primite sau ambele tipuri de tranzactii ordonate cronologic 
