@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Rapoarte">
+
+    <TextView
+        android:id="@+id/textViewRapoarte"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rapoarte"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Spinner
+        android:id="@+id/spnPerioadaTimp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRapoarte"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Switch
+        android:id="@+id/switchCheltuieli"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cheltuieli"
+        app:layout_constraintTop_toBottomOf="@+id/spnPerioadaTimp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Switch
+        android:id="@+id/switchVenituri"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Venituri"
+        app:layout_constraintTop_toBottomOf="@+id/switchCheltuieli"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Spinner
+        android:id="@+id/spnCateg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/switchVenituri"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Button
+        android:id="@+id/btnObtineDocument"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Obtine document"
+        app:layout_constraintTop_toBottomOf="@+id/spnCateg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <ListView
+        android:id="@+id/lv"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnObtineDocument" />
+</androidx.constraintlayout.widget.ConstraintLayout>
