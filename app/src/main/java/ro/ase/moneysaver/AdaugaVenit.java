@@ -32,6 +32,8 @@ public class AdaugaVenit extends AppCompatActivity {
         suma=findViewById(R.id.editTextSumaPrimita);
         data=findViewById(R.id.editTextDataPrimire);
         descriere=findViewById(R.id.editTextDescrierePrimire);
+        categorie=findViewById(R.id.spnCategorieVenit);
+        valuta=findViewById(R.id.spnValutaVenit);
         String[] categorieArray={"Salariu","Cadou","Alte"};
         ArrayAdapter<String> arrayAdapterCategorie=new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,categorieArray);
         categorie.setAdapter(arrayAdapterCategorie);

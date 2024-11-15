@@ -35,6 +35,8 @@ Button salveazaCheltuiala;
         suma=findViewById(R.id.editTextSuma);
         data=findViewById(R.id.editTextData);
         descriere=findViewById(R.id.editTextDescriere);
+        categorie=findViewById(R.id.spnCategorie);
+        valuta=findViewById(R.id.spnValuta);
         String[] categorieArray={"Sanatate","Casa","Cadouri","Educatie","Alimente"};
 
         ArrayAdapter<String> arrayAdapterCategorie=new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,categorieArray);

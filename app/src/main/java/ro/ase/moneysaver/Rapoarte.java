@@ -30,6 +30,8 @@ ListView listViewTranzactii;
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        spnCateg=findViewById(R.id.spnCateg);
+        perioadeTimp=findViewById(R.id.spnPerioadaTimp);
 String[] categorii={"Sanatate","Casa","Cadouri","Educatie","Alimente"};
         ArrayAdapter<String> arrayAdapterCateg=new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,categorii);
         spnCateg.setAdapter(arrayAdapterCateg);

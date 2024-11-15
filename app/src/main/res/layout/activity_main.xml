@@ -44,7 +44,7 @@
         android:id="@+id/textViewEconomii"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="180dp"
         android:text="Doresti sa economisesti saptamana aceasta? Alege cat vrei: "
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,23 +59,26 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewEconomii"/>
 
     <Button
+        android:id="@+id/btnSalvareEconomie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="Economiseste"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spnProcentEconomii" />
+
+    <Button
         android:id="@+id/btnEconomiiTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Vezi cat ai economisit pana acum"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.429"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spnProcentEconomii" />
+        app:layout_constraintTop_toBottomOf="@id/btnSalvareEconomie" />
 
-    <Button
-        android:id="@+id/btnRapoarte"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Rapoarte"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnEconomiiTotal"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
