@@ -9,7 +9,7 @@ enum ValutaVenit{
     EUR,RON,DOL,CHF
 }
 
-public class Venit {
+public class Venit extends Tranzactie{
     private double suma;
     private CategorieVenit categorie;
     private ValutaVenit valuta;
@@ -66,12 +66,7 @@ public class Venit {
 
     @Override
     public String toString() {
-        return "Venit{" +
-                "suma=" + suma +
-                ", categorie=" + categorie +
-                ", valuta=" + valuta +
-                ", descriere='" + descriere + '\'' +
-                ", data=" + data +
-                '}';
+        return "Venit: " + categorie+ ", "+descriere + ", " + suma + " " + valuta + ", " + data;
     }
+
 }

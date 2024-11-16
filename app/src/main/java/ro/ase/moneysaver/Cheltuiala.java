@@ -9,7 +9,7 @@ enum Categorie{
 enum Valuta{
     EUR,RON,DOL,CHF
         }
-public class Cheltuiala {
+public class Cheltuiala extends Tranzactie {
     private double suma;
     private Categorie categorie;
     private Valuta valuta;
@@ -66,12 +66,7 @@ private String descriere;
 
     @Override
     public String toString() {
-        return "Cheltuiala{" +
-                "suma=" + suma +
-                ", categorie=" + categorie +
-                ", valuta=" + valuta +
-                ", data=" + data +
-                ", descriere='" + descriere + '\'' +
-                '}';
+        return "Cheltuiala: " + descriere + ", " + suma + " " + valuta + ", " + data;
     }
+
 }

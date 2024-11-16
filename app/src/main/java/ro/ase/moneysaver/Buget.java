@@ -1,6 +1,9 @@
 package ro.ase.moneysaver;
 
-public class Buget {
+import java.io.Serializable;
+
+public class Buget implements Serializable
+{
     private double suma;
 
     public Buget(double suma) {

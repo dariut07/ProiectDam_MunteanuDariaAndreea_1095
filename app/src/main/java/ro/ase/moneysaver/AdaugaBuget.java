@@ -1,5 +1,8 @@
 package ro.ase.moneysaver;
 
+import static java.lang.Double.parseDouble;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,5 +28,13 @@ Button salveazaBuget;
         });
     sumaBuget=findViewById(R.id.editTextValoareBuget);
     salveazaBuget=findViewById(R.id.btnSalveazaBuget);
+    salveazaBuget.setOnClickListener(view->{
+        double sumaBugetText=parseDouble(sumaBuget.getText().toString());
+        Buget buget=new Buget(sumaBugetText);
+        Intent intent=getIntent();
+        intent.putExtra("bugetFromIntent",buget);
+        setResult(RESULT_OK,intent);
+        finish();
+    });
     }
 }

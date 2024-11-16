@@ -7,8 +7,13 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -20,6 +25,7 @@ Spinner spnEconomii;
 Button adaugaBuget;
 Button salvareEconomii;
 Button cataEconomie;
+private ActivityResultLauncher<Intent> launcher;
     private static final int GROUP_ID=0;
     private static final int ID_OPTIUNE1=1;
     private static final int ID_OPTIUNE2=2;
@@ -41,10 +47,22 @@ spnEconomii=findViewById(R.id.spnProcentEconomii);
         salvareEconomii=findViewById(R.id.btnSalvareEconomie);
         cataEconomie=findViewById(R.id.btnEconomiiTotal);
         adaugaBuget=findViewById(R.id.btnAdaugaBuget);
+        launcher=registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result->{
+            if (result.getResultCode() == RESULT_OK) {
+                Intent intent = result.getData();
+                Buget buget = (Buget) intent.getSerializableExtra("bugetFromIntent");
+                if (buget != null) {
+TextView textBuget=findViewById(R.id.textViewBuget);
+textBuget.setText("Bugetul pe saptamana asta este " + String.valueOf(buget.getSuma()));
+
+                }
+            }
+        });
         adaugaBuget.setOnClickListener(view->{
             Intent intent=new Intent(getApplicationContext(),AdaugaBuget.class);
-            startActivity(intent);
+            launcher.launch(intent);
         });
+
     }
 
     @Override
@@ -61,13 +79,16 @@ spnEconomii=findViewById(R.id.spnProcentEconomii);
             case ID_OPTIUNE1:
                 Intent intent1=new Intent(getApplicationContext(),AdaugaCheltuiala.class);
                 startActivity(intent1);
+                return true;
 
             case ID_OPTIUNE2:
                 Intent intent2=new Intent(getApplicationContext(), AdaugaVenit.class);
                 startActivity(intent2);
+                return true;
             case ID_OPTIUNE3:
                 Intent intent3=new Intent(getApplicationContext(), Rapoarte.class);
                 startActivity(intent3);
+                return true;
 
         }
         return true;

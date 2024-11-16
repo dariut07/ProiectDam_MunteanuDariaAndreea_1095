@@ -31,11 +31,12 @@ Button salvareCont;
         prenume=findViewById(R.id.editTextPrenume);
         email=findViewById(R.id.editTextEmailReg);
         parola=findViewById(R.id.editTextParola);
+        salvareCont=findViewById(R.id.btnSalveazaCont);
         salvareCont.setOnClickListener(view -> {
-            String numeUtilizator = nume.getText().toString().trim();
-            String prenumeUtilizator = prenume.getText().toString().trim();
-            String emailUtilizator = email.getText().toString().trim();
-            String parolaUtilizator = parola.getText().toString().trim();
+            String numeUtilizator = nume.getText().toString();
+            String prenumeUtilizator = prenume.getText().toString();
+            String emailUtilizator = email.getText().toString();
+            String parolaUtilizator = parola.getText().toString();
 
             if (!numeUtilizator.isEmpty() && !prenumeUtilizator.isEmpty() && !emailUtilizator.isEmpty() && !parolaUtilizator.isEmpty()) {
                 ContUser utilizator = new ContUser(numeUtilizator, prenumeUtilizator, emailUtilizator, parolaUtilizator);

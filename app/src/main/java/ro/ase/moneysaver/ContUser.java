@@ -1,6 +1,6 @@
 package ro.ase.moneysaver;
 
-public class ContUser {
+public class  ContUser {
     private String nume;
     private String prenume;
     private String email;

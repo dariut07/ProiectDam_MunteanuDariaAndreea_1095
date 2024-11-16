@@ -1,5 +1,6 @@
 package ro.ase.moneysaver;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,6 +14,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.ArrayList;
+
 public class Rapoarte extends AppCompatActivity {
 Spinner perioadeTimp;
 Switch swCheltuieli;
@@ -20,6 +23,7 @@ Switch swVenituri;
 Spinner spnCateg;
 Button btnDocument;
 ListView listViewTranzactii;
+    ArrayList<Tranzactie> tranzactiiList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,5 +46,14 @@ String[] categorii={"Sanatate","Casa","Cadouri","Educatie","Alimente"};
         swVenituri=findViewById(R.id.switchVenituri);
         btnDocument=findViewById(R.id.btnObtineDocument);
         listViewTranzactii=findViewById(R.id.lv);
+        tranzactiiList = new ArrayList<>();
+        Intent intent = getIntent();
+        Tranzactie tranzactie = (Tranzactie) intent.getSerializableExtra("tranzactie");
+        if (tranzactie != null) {
+            tranzactiiList.add(tranzactie);
+        }
+        ArrayAdapter<Tranzactie> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tranzactiiList);
+
+        listViewTranzactii.setAdapter(adapter);
     }
 }

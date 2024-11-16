@@ -31,8 +31,8 @@ EditText parola;
 
         register=findViewById(R.id.btnRegister);
         register.setOnClickListener(view->{
-            Intent intent=new Intent(getApplicationContext(), Rapoarte.class);
-            startActivity(intent);
+            Intent intent1=new Intent(getApplicationContext(), Inregistrare.class);
+            startActivity(intent1);
         });
 
         email=findViewById(R.id.editTextEmail);
@@ -44,9 +44,9 @@ EditText parola;
             ContUser utilizator = UserManager.valideazaUtilizator(emailText, parolaText);
 
             if (utilizator != null) {
-                Toast.makeText(this, "Autentificare reușită!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+                Toast.makeText(this, "Autentificare reusita!", Toast.LENGTH_SHORT).show();
+                Intent intent2 = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent2);
                 finish();
             } else {
                 Toast.makeText(this, "Credentiale invalide!", Toast.LENGTH_SHORT).show();
