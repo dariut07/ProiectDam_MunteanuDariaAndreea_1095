@@ -52,8 +52,8 @@ String[] categorii={"Sanatate","Casa","Cadouri","Educatie","Alimente"};
         if (tranzactie != null) {
             tranzactiiList.add(tranzactie);
         }
-        ArrayAdapter<Tranzactie> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tranzactiiList);
+       TranzactieAdapter tranzactieAdapter=new TranzactieAdapter(getApplicationContext(), R.layout.view_tranzactii,tranzactiiList,getLayoutInflater());
 
-        listViewTranzactii.setAdapter(adapter);
+        listViewTranzactii.setAdapter(tranzactieAdapter);
     }
 }

@@ -1,6 +1,8 @@
 package ro.ase.moneysaver;
 
-public class  ContUser {
+import java.io.Serializable;
+
+public class  ContUser implements Serializable {
     private String nume;
     private String prenume;
     private String email;

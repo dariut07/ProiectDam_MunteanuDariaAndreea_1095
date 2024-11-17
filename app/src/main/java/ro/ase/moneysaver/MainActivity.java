@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,11 +21,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 Spinner spnEconomii;
 Button adaugaBuget;
 Button salvareEconomii;
 Button cataEconomie;
+ListView listaBuget;
+List<Buget> bugete=new ArrayList<>();
 private ActivityResultLauncher<Intent> launcher;
     private static final int GROUP_ID=0;
     private static final int ID_OPTIUNE1=1;
@@ -40,6 +46,7 @@ private ActivityResultLauncher<Intent> launcher;
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        listaBuget=findViewById(R.id.listviewBuget);
 spnEconomii=findViewById(R.id.spnProcentEconomii);
         String[] procente={"5%","10%","15%"};
         ArrayAdapter<String>adapter=new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,procente);
@@ -52,6 +59,9 @@ spnEconomii=findViewById(R.id.spnProcentEconomii);
                 Intent intent = result.getData();
                 Buget buget = (Buget) intent.getSerializableExtra("bugetFromIntent");
                 if (buget != null) {
+                    bugete.add(buget);
+                    BugetAdapter adapterBuget=new BugetAdapter(getApplicationContext(),R.layout.view_buget,bugete,getLayoutInflater());
+                    listaBuget.setAdapter(adapterBuget);
 TextView textBuget=findViewById(R.id.textViewBuget);
 textBuget.setText("Bugetul pe saptamana asta este " + String.valueOf(buget.getSuma()));
 

@@ -62,7 +62,7 @@ salveazaCheltuiala=findViewById(R.id.btnSalvare);
             String descriereChelt = descriere.getText().toString();
             Categorie categorieChelt = Categorie.valueOf(categorie.getSelectedItem().toString());
             Valuta valutaChelt=Valuta.valueOf(valuta.getSelectedItem().toString());
-            Cheltuiala cheltuiala = new Cheltuiala(descriereChelt,dataChelt,valutaChelt,categorieChelt,sumaChelt);
+            Cheltuiala cheltuiala = new Cheltuiala(sumaChelt, dataChelt,descriereChelt,valutaChelt,categorieChelt);
             Intent intent = new Intent(this, Rapoarte.class);
             intent.putExtra("tranzactie", cheltuiala);
             startActivity(intent);

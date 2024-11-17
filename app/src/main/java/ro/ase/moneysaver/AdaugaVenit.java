@@ -60,8 +60,8 @@ public class AdaugaVenit extends AppCompatActivity {
             String descriereVenit = descriere.getText().toString();
 
 
-            CategorieVenit categorieVenit = CategorieVenit.valueOf(categorie.getSelectedItem().toString());
-            ValutaVenit valutaVenit = ValutaVenit.valueOf(valuta.getSelectedItem().toString());
+            Categorie categorieVenit = Categorie.valueOf(categorie.getSelectedItem().toString());
+            Valuta valutaVenit = Valuta.valueOf(valuta.getSelectedItem().toString());
             Venit venit = new Venit(sumaVenit,dataVenit,descriereVenit,valutaVenit,categorieVenit);
             Intent intent = new Intent(this, Rapoarte.class);
             intent.putExtra("tranzactie", venit);

@@ -1,5 +1,6 @@
 package ro.ase.moneysaver;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,6 +43,9 @@ Button salvareCont;
                 ContUser utilizator = new ContUser(numeUtilizator, prenumeUtilizator, emailUtilizator, parolaUtilizator);
                 UserManager.adaugaUtilizator(utilizator);
                 Toast.makeText(Inregistrare.this, "Cont creat cu succes!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.putExtra("userFromIntent", utilizator);
+                setResult(RESULT_OK, intent);
                 finish();
             } else {
                 Toast.makeText(Inregistrare.this, "Toate câmpurile sunt obligatorii!", Toast.LENGTH_SHORT).show();

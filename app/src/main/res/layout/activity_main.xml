@@ -30,25 +30,33 @@
         app:layout_constraintTop_toBottomOf="@id/textViewBuget" />
 
     <TextView
-        android:id="@+id/textViewFeedback"
+        android:id="@+id/textViewVeziBugetRecent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="144dp"
-        android:text="Feedback:...."
+        android:layout_marginTop="16dp"
+        android:textAlignment="center"
+        android:text="Buget recent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.099"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnAdaugaBuget" />
-
+<ListView
+    android:id="@+id/listviewBuget"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/textViewVeziBugetRecent"
+    android:layout_marginTop="20dp"
+    />
     <TextView
         android:id="@+id/textViewEconomii"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="20dp"
         android:text="Doresti sa economisesti saptamana aceasta? Alege cat vrei: "
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewFeedback" />
+        app:layout_constraintTop_toBottomOf="@+id/listviewBuget" />
 
     <Spinner
         android:id="@+id/spnProcentEconomii"
