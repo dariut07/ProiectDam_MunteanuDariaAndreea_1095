@@ -27,6 +27,7 @@ EditText email;
 EditText parola;
 List<ContUser> userList=new ArrayList<>();
 ListView lvUseri;
+private int pozitieUserEditatInLista;
 
 private ActivityResultLauncher<Intent> launcher;
     @Override
@@ -39,21 +40,40 @@ private ActivityResultLauncher<Intent> launcher;
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        lvUseri=findViewById(R.id.listViewUseri);
         launcher=registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result->{
-lvUseri=findViewById(R.id.listViewUseri);
-        if(result.getResultCode()==RESULT_OK){
+
+        if(result.getData().hasExtra("userFromIntent")){
             Intent intent=result.getData();
             ContUser user=(ContUser) intent.getSerializableExtra("userFromIntent");
-
         if(user!=null){
             userList.add(user);
            UserAdapter userAdapter=new UserAdapter(getApplicationContext(),R.layout.view_useri,userList,getLayoutInflater());
         lvUseri.setAdapter(userAdapter);
         }
+        }else if(result.getData().hasExtra("edit")){
+            Intent intent = result.getData();
+            ContUser user = (ContUser) intent.getSerializableExtra("edit");
+
+            if (user != null){
+                ContUser userDeActualizat = userList.get(pozitieUserEditatInLista);
+                userDeActualizat.setNume(user.getNume());
+                userDeActualizat.setPrenume(user.getPrenume());
+                userDeActualizat.setEmail(user.getEmail());
+                userDeActualizat.setParola(user.getParola());
+                UserAdapter userAdapter = (UserAdapter) lvUseri.getAdapter();
+                userAdapter.notifyDataSetChanged();
+            }
         }
         });
         logIn=findViewById(R.id.btnLogIn);
+        lvUseri.setOnItemClickListener((adapterView,view,position,l)->{
+            pozitieUserEditatInLista=position;
+            Intent intent1=new Intent(getApplicationContext(), Inregistrare.class);
+            intent1.putExtra("edit",userList.get(position));
+            launcher.launch(intent1);
 
+        });
         register=findViewById(R.id.btnRegister);
         register.setOnClickListener(view->{
             Intent intent1=new Intent(getApplicationContext(), Inregistrare.class);

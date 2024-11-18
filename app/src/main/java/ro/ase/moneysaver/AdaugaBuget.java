@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class AdaugaBuget extends AppCompatActivity {
 EditText sumaBuget;
 Button salveazaBuget;
+Boolean isEditing=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,11 +29,26 @@ Button salveazaBuget;
         });
     sumaBuget=findViewById(R.id.editTextValoareBuget);
     salveazaBuget=findViewById(R.id.btnSalveazaBuget);
+        Intent editIntent = getIntent();
+        if (editIntent.hasExtra("edit")) {
+            isEditing = true;
+            Buget editBuget = (Buget) editIntent.getSerializableExtra("edit");
+            sumaBuget.setText(String.valueOf(editBuget.getSuma()));
+        }
     salveazaBuget.setOnClickListener(view->{
-        double sumaBugetText=parseDouble(sumaBuget.getText().toString());
+        float sumaBugetText=Float.parseFloat(sumaBuget.getText().toString());
         Buget buget=new Buget(sumaBugetText);
+        getSharedPreferences("local", MODE_PRIVATE)
+                .edit()
+                .putFloat("bugetSalvat", (float) sumaBugetText)
+                .apply();
         Intent intent=getIntent();
-        intent.putExtra("bugetFromIntent",buget);
+        if (isEditing) {
+            intent.putExtra("edit", buget);
+            isEditing = false;
+        } else {
+            intent.putExtra("bugetFromIntent", buget);
+        }
         setResult(RESULT_OK,intent);
         finish();
     });
