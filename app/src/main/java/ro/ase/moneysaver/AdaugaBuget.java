@@ -38,10 +38,7 @@ Boolean isEditing=false;
     salveazaBuget.setOnClickListener(view->{
         float sumaBugetText=Float.parseFloat(sumaBuget.getText().toString());
         Buget buget=new Buget(sumaBugetText);
-        getSharedPreferences("local", MODE_PRIVATE)
-                .edit()
-                .putFloat("bugetSalvat", (float) sumaBugetText)
-                .apply();
+
         Intent intent=getIntent();
         if (isEditing) {
             intent.putExtra("edit", buget);

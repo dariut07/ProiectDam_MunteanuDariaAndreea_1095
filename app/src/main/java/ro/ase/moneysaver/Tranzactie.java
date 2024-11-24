@@ -1,5 +1,8 @@
 package ro.ase.moneysaver;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,7 +13,10 @@ enum Categorie {
  enum Valuta {
     EUR, RON,DOL, CHF
 }
+@Entity(tableName = "Tranzactii")
 public abstract class Tranzactie implements Serializable {
+@PrimaryKey(autoGenerate = true)
+private long id;
 
     private double suma;
     private Date data;
@@ -64,6 +70,14 @@ public abstract class Tranzactie implements Serializable {
 
     public void setValuta(Valuta valuta) {
         this.valuta = valuta;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     @Override

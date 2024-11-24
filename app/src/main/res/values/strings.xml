@@ -1,6 +1,4 @@
 <resources>
     <string name="app_name">MoneySaver</string>
-    <string name="optiune_1">Adauga cheltuiala</string>
-    <string name="optiune_2">Adauga venit</string>
-    <string name="optiune_3">Rapoarte</string>
+
 </resources>

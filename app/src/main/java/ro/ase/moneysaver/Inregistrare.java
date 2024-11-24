@@ -47,6 +47,7 @@ Boolean isEditing=false;
             parola.setText(editUser.getParola());
         }
             salvareCont.setOnClickListener(view -> {
+
             String numeUtilizator = nume.getText().toString();
             String prenumeUtilizator = prenume.getText().toString();
             String emailUtilizator = email.getText().toString();

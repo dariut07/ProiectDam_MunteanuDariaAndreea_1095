@@ -1,8 +1,13 @@
 package ro.ase.moneysaver;
 
-import java.io.Serializable;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+@Entity (tableName = "useri")
 public class  ContUser implements Serializable {
+    @PrimaryKey(autoGenerate = true)
+    private long id;
     private String nume;
     private String prenume;
     private String email;
@@ -47,10 +52,19 @@ public class  ContUser implements Serializable {
         this.parola = parola;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "ContUser{" +
-                "nume='" + nume + '\'' +
+                "id=" + id +
+                ", nume='" + nume + '\'' +
                 ", prenume='" + prenume + '\'' +
                 ", email='" + email + '\'' +
                 ", parola='" + parola + '\'' +

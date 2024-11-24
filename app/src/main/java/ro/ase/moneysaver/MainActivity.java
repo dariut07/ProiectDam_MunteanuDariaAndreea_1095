@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -32,10 +34,6 @@ public class MainActivity extends AppCompatActivity {
     ListView listaBuget;
     List<Buget> bugete = new ArrayList<>();
     private ActivityResultLauncher<Intent> launcher;
-    private static final int GROUP_ID = 0;
-    private static final int ID_OPTIUNE1 = 1;
-    private static final int ID_OPTIUNE2 = 2;
-    private static final int ID_OPTIUNE3 = 3;
     private int pozitieBugetEditatInLista;
 
     @Override
@@ -60,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE);
         Float bugetSalvat = sharedPreferences.getFloat("bugetSalvat", 0.0f);
 
-        // Configurare TextView pentru buget
         TextView textBuget = findViewById(R.id.textViewBuget);
         if (bugetSalvat > 0) {
             textBuget.setText("Bugetul pe săptămâna aceasta este " + bugetSalvat + " RON");
@@ -73,19 +70,16 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, procente);
         spnEconomii.setAdapter(adapter);
 
-
+        BugetDB dbInstance = BugetDB.getInstance(getApplicationContext());
         launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getData() == null) return;
-
             if (result.getData().hasExtra("bugetFromIntent")) {
                 Intent intent = result.getData();
                 Buget buget = (Buget) intent.getSerializableExtra("bugetFromIntent");
                 if (buget != null) {
-                    bugete.add(buget);
+                    dbInstance.getBugetDAO().insertBuget(buget);
+                    bugete = dbInstance.getBugetDAO().getAll();
                     BugetAdapter adapterBuget = new BugetAdapter(getApplicationContext(), R.layout.view_buget, bugete, getLayoutInflater());
                     listaBuget.setAdapter(adapterBuget);
-
-
                     textBuget.setText("Bugetul pe săptămâna aceasta este " + buget.getSuma() + " RON");
                     sharedPreferences.edit().putFloat("bugetSalvat", (float) buget.getSuma()).apply();
                 }
@@ -93,19 +87,14 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = result.getData();
                 Buget buget = (Buget) intent.getSerializableExtra("edit");
                 if (buget != null) {
-                    Buget bugetDeActualizat = bugete.get(pozitieBugetEditatInLista);
-                    bugetDeActualizat.setSuma(buget.getSuma());
-                    BugetAdapter bugetAdapter = (BugetAdapter) listaBuget.getAdapter();
-                    bugetAdapter.notifyDataSetChanged();
-
-
+                    bugete = dbInstance.getBugetDAO().getAll();
+                    BugetAdapter adapterBuget = new BugetAdapter(getApplicationContext(), R.layout.view_buget, bugete, getLayoutInflater());
+                    listaBuget.setAdapter(adapterBuget);
                     textBuget.setText("Bugetul pe săptămâna aceasta este " + buget.getSuma() + " RON");
                     sharedPreferences.edit().putFloat("bugetSalvat", (float) buget.getSuma()).apply();
                 }
             }
         });
-
-
         listaBuget.setOnItemClickListener((adapterView, view, position, l) -> {
             pozitieBugetEditatInLista = position;
             Intent intent1 = new Intent(getApplicationContext(), AdaugaBuget.class);
@@ -118,34 +107,49 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), AdaugaBuget.class);
             launcher.launch(intent);
         });
+        listaBuget.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            private long lastClickTime = 0;
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                long currentTime = System.currentTimeMillis();
+                if (currentTime - lastClickTime < 300) {
+                    Buget bugetDeSters = bugete.get(position);
+                    dbInstance.getBugetDAO().deleteBugetById(bugetDeSters.getIdBuget());
+                    bugete.remove(position);
+                    ((BugetAdapter) listaBuget.getAdapter()).notifyDataSetChanged();
+                    Toast.makeText(MainActivity.this, "Buget șters cu succes!", Toast.LENGTH_SHORT).show();
+                }
+                lastClickTime = currentTime;
+            }
+        });
+
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(GROUP_ID, ID_OPTIUNE1, 1, R.string.optiune_1);
-        menu.add(GROUP_ID, ID_OPTIUNE2, 2, R.string.optiune_2);
-        menu.add(GROUP_ID, ID_OPTIUNE3, 3, R.string.optiune_3);
+       getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case ID_OPTIUNE1:
-                Intent intent1 = new Intent(getApplicationContext(), AdaugaCheltuiala.class);
-                startActivity(intent1);
-                return true;
-
-            case ID_OPTIUNE2:
+        if (item.getItemId() != R.id.optiune1) {
+            Intent intent1 = new Intent(getApplicationContext(), AdaugaCheltuiala.class);
+            startActivity(intent1);
+            return true;
+        }
+            if(item.getItemId() != R.id.optiune2) {
                 Intent intent2 = new Intent(getApplicationContext(), AdaugaVenit.class);
                 startActivity(intent2);
                 return true;
-
-            case ID_OPTIUNE3:
+            }
+            if(item.getItemId() != R.id.optiune3) {
                 Intent intent3 = new Intent(getApplicationContext(), Rapoarte.class);
                 startActivity(intent3);
                 return true;
-        }
+            }
         return true;
     }
 }
