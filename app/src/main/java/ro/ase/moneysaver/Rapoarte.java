@@ -2,6 +2,7 @@ package ro.ase.moneysaver;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -14,7 +15,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class Rapoarte extends AppCompatActivity {
 Spinner perioadeTimp;
@@ -23,6 +27,8 @@ Switch swVenituri;
 Spinner spnCateg;
 Button btnDocument;
 ListView listViewTranzactii;
+private String jsonUrlVenit="https://www.jsonkeeper.com/b/O18U";
+private String jsonUrlCheltuiala="https://www.jsonkeeper.com/b/YTO0";
     ArrayList<Tranzactie> tranzactiiList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +42,7 @@ ListView listViewTranzactii;
         });
         spnCateg=findViewById(R.id.spnCateg);
         perioadeTimp=findViewById(R.id.spnPerioadaTimp);
-String[] categorii={"Sanatate","Casa","Cadouri","Educatie","Alimente"};
-        ArrayAdapter<String> arrayAdapterCateg=new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,categorii);
+        ArrayAdapter<CharSequence> arrayAdapterCateg=ArrayAdapter.createFromResource(this,R.array.categorii, android.R.layout.simple_spinner_dropdown_item);
         spnCateg.setAdapter(arrayAdapterCateg);
         String[] perioade={"Azi","O saptamana","O luna"};
         ArrayAdapter<String> arrayAdapterPerioade=new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,perioade);
@@ -55,5 +60,58 @@ String[] categorii={"Sanatate","Casa","Cadouri","Educatie","Alimente"};
        TranzactieAdapter tranzactieAdapter=new TranzactieAdapter(getApplicationContext(), R.layout.view_tranzactii,tranzactiiList,getLayoutInflater());
 
         listViewTranzactii.setAdapter(tranzactieAdapter);
+        incarcaVenituriDinRetea();
+        incarcaCheltuieliDinRetea();
+
+    }
+    private void incarcaVenituriDinRetea(){
+        Thread thread=new Thread(){
+            @Override
+            public void run() {
+                HttpsManager manager=new HttpsManager(jsonUrlVenit);
+                String json=manager.procesare();
+                new Handler(getMainLooper()).post(()->{
+                    try {
+                        getVenituri(json);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            }
+    };
+        thread.start();
+    }
+    private void incarcaCheltuieliDinRetea() {
+    Thread thread = new Thread() {
+        @Override
+        public void run() {
+            HttpsManager manager = new HttpsManager(jsonUrlCheltuiala);
+            String json = manager.procesare();
+            new Handler(getMainLooper()).post(() -> {
+                try {
+                    getCheltuieli(json);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+
+    }
+    };
+    thread.start();
+    }
+    private void getVenituri(String json) throws JSONException {
+        tranzactiiList.addAll(VenitParser.parseJson(json));
+        TranzactieAdapter tranzactieAdapter=(TranzactieAdapter) listViewTranzactii.getAdapter();
+        tranzactieAdapter.notifyDataSetChanged();
+    }
+    private void getCheltuieli(String json) throws JSONException {
+        List<Cheltuiala> cheltuieli=CheltuialaParser.parseJson(json);
+        for (int i = 0; i < cheltuieli.size(); i++) {
+            tranzactiiList.add(cheltuieli.get(i));
+        }
+        TranzactieAdapter tranzactieAdapter=(TranzactieAdapter) listViewTranzactii.getAdapter();
+        tranzactieAdapter.notifyDataSetChanged();
+
     }
 }

@@ -6,5 +6,7 @@
    <color name="pink">#FFC0CB</color>
     <color name="babyBlue">#89CFF0</color>
     <color name="lightGreen">#E0FFFF  </color>
+    <color name="red">#FF0000</color>
+
 
 </resources>

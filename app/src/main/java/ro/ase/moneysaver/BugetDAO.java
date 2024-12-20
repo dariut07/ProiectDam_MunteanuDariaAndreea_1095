@@ -11,7 +11,7 @@ import java.util.List;
 public interface BugetDAO {
     @Insert
     void insertBuget(Buget buget);
-    @Query("SELECT * FROM bugete")
+    @Query("select * from bugete")
     List<Buget> getAll();
     @Query("SELECT * FROM bugete WHERE idBuget = :idCautat")
     Buget getById(int idCautat);
@@ -19,5 +19,7 @@ public interface BugetDAO {
     void deleteAll();
     @Query("DELETE FROM bugete WHERE idBuget = :id")
     void deleteBugetById(long id);
+    @Query("UPDATE bugete SET suma = :suma WHERE idBuget = :id")
+    void updateBuget(float suma, long id);
 
 }

@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
@@ -24,8 +26,8 @@ EditText descriere;
 Spinner categorie;
 Spinner valuta;
 Button salveazaCheltuiala;
-
-
+RadioGroup metodaPlata;
+CheckBox esteUrgenta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ Button salveazaCheltuiala;
         descriere=findViewById(R.id.editTextDescriere);
         categorie=findViewById(R.id.spnCategorie);
         valuta=findViewById(R.id.spnValuta);
+        metodaPlata=findViewById(R.id.radioGroupMetodaPlata);
         String[] categorieArray={"Sanatate","Casa","Cadouri","Educatie","Alimente"};
 
         ArrayAdapter<String> arrayAdapterCategorie=new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,categorieArray);
@@ -49,6 +52,7 @@ Button salveazaCheltuiala;
         String[] valutaArray={"EUR","RON","DOL","CHF"};
         ArrayAdapter<String> arrayAdapterValuta=new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,valutaArray);
 valuta.setAdapter(arrayAdapterValuta);
+esteUrgenta=findViewById(R.id.checkBox);
 salveazaCheltuiala=findViewById(R.id.btnSalvare);
         salveazaCheltuiala.setOnClickListener(view -> {
             double sumaChelt = Double.parseDouble(suma.getText().toString());
@@ -62,7 +66,9 @@ salveazaCheltuiala=findViewById(R.id.btnSalvare);
             String descriereChelt = descriere.getText().toString();
             Categorie categorieChelt = Categorie.valueOf(categorie.getSelectedItem().toString());
             Valuta valutaChelt=Valuta.valueOf(valuta.getSelectedItem().toString());
-            Cheltuiala cheltuiala = new Cheltuiala(sumaChelt, dataChelt,descriereChelt,valutaChelt,categorieChelt);
+      MetodaPlata metodaPlata1=metodaPlata.getCheckedRadioButtonId()==R.id.radioButtonCASH?MetodaPlata.CASH:MetodaPlata.CARD;
+      boolean esteUrgenta1=esteUrgenta.isChecked();
+            Cheltuiala cheltuiala = new Cheltuiala(sumaChelt, dataChelt,descriereChelt,valutaChelt,categorieChelt,metodaPlata1,esteUrgenta1);
             Intent intent = new Intent(this, Rapoarte.class);
             intent.putExtra("tranzactie", cheltuiala);
             startActivity(intent);

@@ -21,6 +21,8 @@ public interface UserDAO {
     void deleteUserById(long id);
     @Query("SELECT * FROM useri WHERE email = :email AND parola = :parola LIMIT 1")
     ContUser getUserByEmailAndPassword(String email, String parola);
+    @Query("update useri set nume=:nume,prenume=:prenume,email=:email,parola=:parola where id=:id")
+    void updateUser(String nume,String prenume,String email,String parola,long id);
 
 
 

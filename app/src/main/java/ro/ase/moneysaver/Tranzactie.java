@@ -1,5 +1,6 @@
 package ro.ase.moneysaver;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -13,23 +14,33 @@ enum Categorie {
  enum Valuta {
     EUR, RON,DOL, CHF
 }
-@Entity(tableName = "Tranzactii")
-public abstract class Tranzactie implements Serializable {
+
+enum MetodaPlata {
+    CASH, CARD
+}
+@Entity(tableName = "tranzactii")
+public class Tranzactie implements Serializable {
 @PrimaryKey(autoGenerate = true)
 private long id;
-
+@ColumnInfo(name="suma")
     private double suma;
+@ColumnInfo(name="data")
     private Date data;
+@ColumnInfo(name="descriere")
     private String descriere;
+@ColumnInfo(name="categorie")
     private Categorie categorie;
+@ColumnInfo(name="valuta")
     private Valuta valuta;
-
-    public Tranzactie(double suma, Date data, String descriere, Valuta valuta, Categorie categorie) {
+@ColumnInfo(name="metodaPlata")
+private MetodaPlata metodaPlata;
+    public Tranzactie(double suma, Date data, String descriere, Valuta valuta, Categorie categorie, MetodaPlata metodaPlata) {
         this.suma = suma;
         this.data = data;
         this.descriere = descriere;
         this.valuta = valuta;
         this.categorie = categorie;
+        this.metodaPlata = metodaPlata;
     }
 
     public double getSuma() {
@@ -80,10 +91,24 @@ private long id;
         this.id = id;
     }
 
+    public MetodaPlata getMetodaPlata() {
+        return metodaPlata;
+    }
+
+    public void setMetodaPlata(MetodaPlata metodaPlata) {
+        this.metodaPlata = metodaPlata;
+    }
+
     @Override
     public String toString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        return String.format("Descriere: %s, Suma: %.2f %s, Categorie: %s, Data: %s",
-                descriere, suma, valuta, categorie, sdf.format(data));
+        return "Tranzactie{" +
+                "id=" + id +
+                ", suma=" + suma +
+                ", data=" + data +
+                ", descriere='" + descriere + '\'' +
+                ", categorie=" + categorie +
+                ", valuta=" + valuta +
+                ", metodaPlata=" + metodaPlata +
+                '}';
     }
 }

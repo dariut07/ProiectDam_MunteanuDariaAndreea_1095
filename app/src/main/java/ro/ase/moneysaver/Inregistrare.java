@@ -21,6 +21,7 @@ EditText prenume;
 EditText email;
 EditText parola;
 Button salvareCont;
+Button stergereCont;
 Boolean isEditing=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ Boolean isEditing=false;
         email=findViewById(R.id.editTextEmailReg);
         parola=findViewById(R.id.editTextParola);
         salvareCont=findViewById(R.id.btnSalveazaCont);
+        stergereCont=findViewById(R.id.btnStergere);
         Intent editIntent = getIntent();
         if (editIntent.hasExtra("edit")) {
             isEditing = true;
@@ -55,20 +57,42 @@ Boolean isEditing=false;
 
             if (!numeUtilizator.isEmpty() && !prenumeUtilizator.isEmpty() && !emailUtilizator.isEmpty() && !parolaUtilizator.isEmpty()) {
                 ContUser utilizator = new ContUser(numeUtilizator, prenumeUtilizator, emailUtilizator, parolaUtilizator);
-                UserManager.adaugaUtilizator(utilizator);
-                Toast.makeText(Inregistrare.this, "Cont creat cu succes!", Toast.LENGTH_SHORT).show();
+                AppDB dbInstance = AppDB.getInstance(getApplicationContext());
+                ContUser utilizatorExistent = dbInstance.getUserDAO().getUserByEmailAndPassword(emailUtilizator, parolaUtilizator);
+                if (utilizatorExistent != null) {
+                    Toast.makeText(Inregistrare.this, "Contul deja exista!", Toast.LENGTH_SHORT).show();
+                }else{
                 Intent intent = getIntent();
                 if (isEditing) {
                     intent.putExtra("edit", utilizator);
                     isEditing = false;
+                    Toast.makeText(Inregistrare.this, "Cont editat cu succes!", Toast.LENGTH_SHORT).show();
                 } else {
+                    dbInstance.getUserDAO().insertUser(utilizator);
                     intent.putExtra("userFromIntent", utilizator);
+                    Toast.makeText(Inregistrare.this, "Cont creat cu succes!", Toast.LENGTH_SHORT).show();
                 }
                 setResult(RESULT_OK, intent);
                 finish();
+            }
             } else {
                 Toast.makeText(Inregistrare.this, "Toate câmpurile sunt obligatorii!", Toast.LENGTH_SHORT).show();
             }
+        });
+        stergereCont.setOnClickListener(view -> {
+           if(isEditing){
+               ContUser user=(ContUser) editIntent.getSerializableExtra("edit");
+               AppDB dbInstance = AppDB.getInstance(getApplicationContext());
+               dbInstance.getUserDAO().deleteUserById(user.getId());
+               Intent intent=new Intent();
+               intent.putExtra("deleteUser",true);
+               setResult(RESULT_OK,intent);
+               isEditing=false;
+               finish();
+
+           }else {
+               Toast.makeText(Inregistrare.this, "Contul nu poate fi sters!", Toast.LENGTH_SHORT).show();
+           }
         });
     }
 }

@@ -68,13 +68,24 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"/>
 
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Este o urgenta"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spnValuta"
+
+        />
+
     <RadioGroup
         android:id="@+id/radioGroupMetodaPlata"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDescriere"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
         >

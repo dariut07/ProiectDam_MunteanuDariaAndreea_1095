@@ -1,5 +1,6 @@
 package ro.ase.moneysaver;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -8,9 +9,14 @@ import java.io.Serializable;
 public class  ContUser implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private long id;
+    @ColumnInfo(name = "nume")
     private String nume;
+    @ColumnInfo(name = "prenume")
     private String prenume;
+
+    @ColumnInfo(name = "email")
     private String email;
+    @ColumnInfo(name = "parola")
     private String parola;
 
     public ContUser(String nume, String prenume, String email, String parola) {

@@ -2,6 +2,7 @@ package ro.ase.moneysaver;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +17,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +31,7 @@ public class Login extends AppCompatActivity {
     ListView lvUseri;
     private int pozitieUserEditatInLista;
     private ActivityResultLauncher<Intent> launcher;
+    private String jsonUrl="https://www.jsonkeeper.com/b/K5SO";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,32 +44,39 @@ public class Login extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        UserDB dbInstance = UserDB.getInstance(getApplicationContext());
+        AppDB dbInstance = AppDB.getInstance(getApplicationContext());
         lvUseri = findViewById(R.id.listViewUseri);
-        actualizeazaListaUtilizatori(dbInstance);
-
+        userList = dbInstance.getUserDAO().getAll();
+        UserAdapter userAdapter=new UserAdapter(getApplicationContext(),R.layout.view_useri,userList,getLayoutInflater());
+        lvUseri.setAdapter(userAdapter);
+        incarcareUseriDinRetea();
         launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            Intent intent = result.getData();
-            if (intent != null) {
-                if (intent.hasExtra("userFromIntent")) {
-                    ContUser user = (ContUser) intent.getSerializableExtra("userFromIntent");
-                    if (user != null) {
-                        dbInstance.getUserDAO().insertUser(user);
-                        actualizeazaListaUtilizatori(dbInstance);
-                    }
-                } else if (intent.hasExtra("edit")) {
-                    ContUser user = (ContUser) intent.getSerializableExtra("edit");
-                    if (user != null) {
-                        ContUser userDeActualizat = userList.get(pozitieUserEditatInLista);
-                        userDeActualizat.setNume(user.getNume());
-                        userDeActualizat.setPrenume(user.getPrenume());
-                        userDeActualizat.setEmail(user.getEmail());
-                        userDeActualizat.setParola(user.getParola());
-                        actualizeazaListaUtilizatori(dbInstance);
+           if(result.getData().hasExtra("userFromIntent")){
+               Intent intent=result.getData();
+               ContUser user= (ContUser) intent.getSerializableExtra("userFromIntent");
+               if(user!=null){
+                   userList.add(user);
+                   userAdapter.notifyDataSetChanged();
+               }
 
-                    }
-                }
-            }
+           } else if (result.getData().hasExtra("edit")) {
+               Intent intent = result.getData();
+               ContUser user = (ContUser) intent.getSerializableExtra("edit");
+               if (user != null) {
+                  ContUser userEditat=userList.get(pozitieUserEditatInLista);
+                  dbInstance.getUserDAO().updateUser(user.getNume(),user.getPrenume(),user.getEmail(),user.getParola(),userEditat.getId());
+                  userList.clear();
+                  userList=dbInstance.getUserDAO().getAll();
+                  userAdapter.notifyDataSetChanged();
+
+               }
+           } else if (result.getData().hasExtra("deleteUser")) {
+               Toast.makeText(this, "Cont sters cu succes!", Toast.LENGTH_SHORT).show();
+               userList.clear();
+               userList.addAll(dbInstance.getUserDAO().getAll());
+               userAdapter.notifyDataSetChanged();
+           }
+
         });
 
         logIn = findViewById(R.id.btnLogIn);
@@ -74,13 +85,14 @@ public class Login extends AppCompatActivity {
         parola = findViewById(R.id.editTextPassword);
 
         logIn.setOnClickListener(view -> {
-            String emailText = email.getText().toString().trim();
-            String parolaText = parola.getText().toString().trim();
+            String emailText = email.getText().toString();
+            String parolaText = parola.getText().toString();
 
             ContUser utilizator = dbInstance.getUserDAO().getUserByEmailAndPassword(emailText, parolaText);
             if (utilizator != null) {
                 Toast.makeText(this, "Autentificare reușită!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("user", utilizator);
                 startActivity(intent);
                 finish();
             } else {
@@ -100,10 +112,29 @@ public class Login extends AppCompatActivity {
             launcher.launch(intent);
         });
     }
+    private void incarcareUseriDinRetea(){
+        Thread thread=new Thread(){
+            @Override
+            public void run() {
+                    HttpsManager manager=new HttpsManager(jsonUrl);
+                    String json=manager.procesare();
+                    new Handler(getMainLooper()).post(()->{
+                        try {
+                            getUseri(json);
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+            }
+        };
 
-    private void actualizeazaListaUtilizatori(UserDB dbInstance) {
-        userList = dbInstance.getUserDAO().getAll();
-        UserAdapter userAdapter = new UserAdapter(getApplicationContext(), R.layout.view_useri, userList, getLayoutInflater());
-        lvUseri.setAdapter(userAdapter);
+        thread.start();
     }
+    private void getUseri(String json) throws JSONException {
+        userList.addAll(ParserUser.parseJson(json));
+        UserAdapter userAdapter=(UserAdapter) lvUseri.getAdapter();
+        userAdapter.notifyDataSetChanged();
+    }
+
+
 }

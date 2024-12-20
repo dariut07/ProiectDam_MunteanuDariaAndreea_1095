@@ -17,6 +17,7 @@ public class AdaugaBuget extends AppCompatActivity {
 EditText sumaBuget;
 Button salveazaBuget;
 Boolean isEditing=false;
+Button stergeBuget;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,25 +30,39 @@ Boolean isEditing=false;
         });
     sumaBuget=findViewById(R.id.editTextValoareBuget);
     salveazaBuget=findViewById(R.id.btnSalveazaBuget);
+    stergeBuget=findViewById(R.id.btnSterge);
         Intent editIntent = getIntent();
         if (editIntent.hasExtra("edit")) {
             isEditing = true;
             Buget editBuget = (Buget) editIntent.getSerializableExtra("edit");
             sumaBuget.setText(String.valueOf(editBuget.getSuma()));
         }
+        AppDB dbInstance = AppDB.getInstance(getApplicationContext());
     salveazaBuget.setOnClickListener(view->{
-        float sumaBugetText=Float.parseFloat(sumaBuget.getText().toString());
-        Buget buget=new Buget(sumaBugetText);
-
         Intent intent=getIntent();
+        float sumaBugetText=Float.parseFloat(sumaBuget.getText().toString());
+        ContUser user=(ContUser) intent.getSerializableExtra("user");
+        Buget buget=new Buget(sumaBugetText,user.getId());
         if (isEditing) {
-            intent.putExtra("edit", buget);
+            Intent intent1=new Intent();
+            intent1.putExtra("edit", buget);
             isEditing = false;
         } else {
+            dbInstance.getBugetDAO().insertBuget(buget);
             intent.putExtra("bugetFromIntent", buget);
         }
         setResult(RESULT_OK,intent);
         finish();
+    });
+    stergeBuget.setOnClickListener(view->{
+        if(isEditing){
+            Buget buget=(Buget)editIntent.getSerializableExtra("edit");
+            dbInstance.getBugetDAO().deleteBugetById(buget.getIdBuget());
+            Intent intent=new Intent();
+            intent.putExtra("deleteBuget",true);
+            setResult(RESULT_OK,intent);
+            finish();
+        }
     });
     }
 }

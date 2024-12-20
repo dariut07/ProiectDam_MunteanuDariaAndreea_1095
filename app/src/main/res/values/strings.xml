@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">MoneySaver</string>
-
+<string-array name="Recurenta">
+    <item>Lunar</item>
+    <item>Saptamanal</item>
+    <item>Anual</item>
+    <item>Unic</item>
+</string-array>
+    <string-array name="categorii">
+        <item>Sanatate</item>
+        <item>Casa</item>
+        <item>Cadouri</item>
+        <item>Educatie</item>
+        <item>Alimente</item>
+    </string-array>
 </resources>
